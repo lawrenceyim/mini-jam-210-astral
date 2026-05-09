@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dn7jcnp8fpmwm" path="res://Assets/Sprites/Telescope view 1280 720.png" id="1_75vo1"]
 [ext_resource type="Script" uid="uid://dlj2h4fmmrojc" path="res://Scripts/TelescopeView.cs" id="1_n8yra"]
 [ext_resource type="Texture2D" uid="uid://byp5nmum0mqot" path="res://icon.svg" id="2_r4qur"]
+[ext_resource type="Texture2D" uid="uid://by3v1md6fdiii" path="res://Assets/Sprites/Space Background.png" id="3_ceigu"]
 
 [node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera")]
 script = ExtResource("1_n8yra")
@@ -13,6 +14,10 @@ _camera = NodePath("Camera2D")
 [node name="TelescopeView1280720" type="Sprite2D" parent="Camera2D" unique_id=1124737430]
 z_index = 10
 texture = ExtResource("1_75vo1")
+
+[node name="SpaceBackground" type="Sprite2D" parent="Camera2D" unique_id=2131916985]
+z_index = -10
+texture = ExtResource("3_ceigu")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1734834214]
 position = Vector2(53, -105)
