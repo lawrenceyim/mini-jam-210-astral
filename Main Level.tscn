@@ -9,6 +9,7 @@
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
 _stars = [NodePath("Icon"), NodePath("Icon2"), NodePath("Icon3"), NodePath("Icon4")]
+_constellationPositions = PackedVector2Array(0, 0)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1970771489]
 

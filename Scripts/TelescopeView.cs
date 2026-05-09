@@ -8,6 +8,11 @@ public partial class TelescopeView : Node2D {
 	[Export]
 	private Sprite2D[] _stars;
 
+	[Export]
+	private Vector2[] _constellationPositions;
+
+	private bool[] _constellationFound;
+
 	private float _starsMaxScale = 1.5f;
 	private float _starsMinScale = .5f;
 	private float _starsScaleSpeed = .5f;
@@ -15,10 +20,22 @@ public partial class TelescopeView : Node2D {
 
 	private Vector2 _cameraSpeed = new(200, 200);
 
+	private bool _scanKeyPressed = false;
+	private float _scanTolerance = 100f;
+	
+	public override void _Ready() {
+		_InitConstellations();
+	}
+
 	public override void _Process(double delta) {
 		_MoveCamera(delta);
 		(int zoomInput, int rotationInput) = _GetCameraInput();
 		_Zoom(zoomInput, delta);
+		_ScanConstellation();
+	}
+
+	private void _InitConstellations() {
+		_constellationFound = new bool[_constellationPositions.Length];
 	}
 
 	private void _MoveCamera(double delta) {
@@ -36,6 +53,23 @@ public partial class TelescopeView : Node2D {
 		foreach (Sprite2D star in _stars) {
 			star.Scale = scale;
 		}
+	}
+
+	private void _ScanConstellation() {
+		bool keyPressed = Input.IsKeyPressed(Key.Space);
+
+		if (!keyPressed) {
+			_scanKeyPressed = false;
+			return;
+		}
+		
+		if (_scanKeyPressed) {
+			return;
+		}
+
+		_scanKeyPressed = true;
+		GD.Print($"Scanned at {_camera.Position}");
+		// SCAN
 	}
 
 	private Vector2 _GetMovementInput() {
