@@ -3,13 +3,22 @@
 [ext_resource type="Texture2D" uid="uid://dn7jcnp8fpmwm" path="res://Assets/Sprites/Telescope view 1280 720.png" id="1_75vo1"]
 [ext_resource type="Script" uid="uid://dlj2h4fmmrojc" path="res://Scripts/TelescopeView.cs" id="1_n8yra"]
 [ext_resource type="Texture2D" uid="uid://byp5nmum0mqot" path="res://icon.svg" id="2_r4qur"]
+[ext_resource type="AudioStream" uid="uid://fpkcmm3rfvre" path="res://Assets/SFX/sfx_collect_star_sheen_01.mp3" id="2_uxobj"]
+[ext_resource type="AudioStream" uid="uid://dv1e174b7ckae" path="res://Assets/SFX/sfx_collect_star_sheen_02.mp3" id="3_bs0lh"]
 [ext_resource type="Texture2D" uid="uid://by3v1md6fdiii" path="res://Assets/Sprites/Space Background.png" id="3_ceigu"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_stars")]
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_stars", "_sfxPlayer")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
 _stars = [NodePath("Icon"), NodePath("Icon2"), NodePath("Icon3"), NodePath("Icon4")]
 _constellationPositions = PackedVector2Array(0, 0)
+_sfxPlayer = NodePath("AudioStreamPlayer")
+_constellationFound1 = ExtResource("2_uxobj")
+_constellationFound2 = ExtResource("3_bs0lh")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
+stream = ExtResource("2_uxobj")
+volume_db = -20.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1970771489]
 
