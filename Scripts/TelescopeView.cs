@@ -22,7 +22,7 @@ public partial class TelescopeView : Node2D {
 
 	private bool _scanKeyPressed = false;
 	private float _scanTolerance = 100f;
-	
+
 	public override void _Ready() {
 		_InitConstellations();
 	}
@@ -62,7 +62,7 @@ public partial class TelescopeView : Node2D {
 			_scanKeyPressed = false;
 			return;
 		}
-		
+
 		if (_scanKeyPressed) {
 			return;
 		}
@@ -70,6 +70,23 @@ public partial class TelescopeView : Node2D {
 		_scanKeyPressed = true;
 		GD.Print($"Scanned at {_camera.Position}");
 		// SCAN
+		// Play SFX for failure or success
+		// Update found constellations
+		for (int i = 0; i < _constellationPositions.Length; i++) {
+			if (_constellationFound[i]) {
+				continue;
+			}
+
+			if (!(_camera.Position.DistanceTo(_constellationPositions[i]) <= _scanTolerance)) {
+				continue;
+			}
+
+			GD.Print($"Found constellation {i} at {_constellationPositions[i]}");
+			_constellationFound[i] = true;
+			// Play VFX
+			// Play SFX
+			break;
+		}
 	}
 
 	private Vector2 _GetMovementInput() {
