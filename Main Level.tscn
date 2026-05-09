@@ -5,9 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://byp5nmum0mqot" path="res://icon.svg" id="2_r4qur"]
 [ext_resource type="Texture2D" uid="uid://by3v1md6fdiii" path="res://Assets/Sprites/Space Background.png" id="3_ceigu"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera")]
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_stars")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
+_stars = [NodePath("Icon"), NodePath("Icon2"), NodePath("Icon3"), NodePath("Icon4")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1970771489]
 

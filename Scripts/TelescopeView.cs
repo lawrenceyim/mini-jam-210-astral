@@ -1,13 +1,32 @@
+using System;
 using Godot;
 
 public partial class TelescopeView : Node2D {
 	[Export]
 	private Camera2D _camera;
 
+	[Export]
+	private Sprite2D[] _stars;
+
+	private float _starsMaxScale = 1.5f;
+	private float _starsMinScale = .5f;
+	private float _starsScaleSpeed = .5f;
+	private float _currentStarsScale = 1f;
+
 	private Vector2 _cameraSpeed = new(200, 200);
 
 	public override void _Process(double delta) {
 		_camera.Position += _GetMovementInput() * _cameraSpeed * (float)delta;
+		(int zoomInput, int rotationInput) = _GetCameraInput();
+
+		if (zoomInput != 0) {
+			_currentStarsScale += _starsScaleSpeed * zoomInput * (float)delta;
+			_currentStarsScale = Math.Clamp(_currentStarsScale, _starsMinScale, _starsMaxScale);
+			Vector2 scale = new(_currentStarsScale, _currentStarsScale);
+			foreach (Sprite2D star in _stars) {
+				star.Scale = scale;
+			}
+		}
 	}
 
 	private Vector2 _GetMovementInput() {
@@ -30,5 +49,31 @@ public partial class TelescopeView : Node2D {
 		}
 
 		return input.Normalized();
+	}
+
+	private (int zoomInput, int rotationInput) _GetCameraInput() {
+		int zoomInput = 0;
+		int rotationInput = 0;
+
+		if (Input.IsKeyPressed(Key.Up)) {
+			zoomInput += 1;
+		}
+
+		if (Input.IsKeyPressed(Key.Down)) {
+			zoomInput -= 1;
+		}
+
+		if (Input.IsKeyPressed(Key.Left)) {
+			rotationInput -= 1;
+		}
+
+		if (Input.IsKeyPressed(Key.Right)) {
+			rotationInput += 1;
+		}
+
+		return (
+			zoomInput,
+			rotationInput
+		);
 	}
 }
