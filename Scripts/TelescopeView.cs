@@ -16,16 +16,25 @@ public partial class TelescopeView : Node2D {
 	private Vector2 _cameraSpeed = new(200, 200);
 
 	public override void _Process(double delta) {
-		_camera.Position += _GetMovementInput() * _cameraSpeed * (float)delta;
+		_MoveCamera(delta);
 		(int zoomInput, int rotationInput) = _GetCameraInput();
+		_Zoom(zoomInput, delta);
+	}
 
-		if (zoomInput != 0) {
-			_currentStarsScale += _starsScaleSpeed * zoomInput * (float)delta;
-			_currentStarsScale = Math.Clamp(_currentStarsScale, _starsMinScale, _starsMaxScale);
-			Vector2 scale = new(_currentStarsScale, _currentStarsScale);
-			foreach (Sprite2D star in _stars) {
-				star.Scale = scale;
-			}
+	private void _MoveCamera(double delta) {
+		_camera.Position += _GetMovementInput() * _cameraSpeed * (float)delta;
+	}
+
+	private void _Zoom(int zoomInput, double delta) {
+		if (zoomInput == 0) {
+			return;
+		}
+
+		_currentStarsScale += _starsScaleSpeed * zoomInput * (float)delta;
+		_currentStarsScale = Math.Clamp(_currentStarsScale, _starsMinScale, _starsMaxScale);
+		Vector2 scale = new(_currentStarsScale, _currentStarsScale);
+		foreach (Sprite2D star in _stars) {
+			star.Scale = scale;
 		}
 	}
 
