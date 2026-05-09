@@ -6,12 +6,6 @@ public partial class TelescopeView : Node2D {
 	private Camera2D _camera;
 
 	[Export]
-	private Sprite2D[] _stars;
-
-	[Export]
-	private Vector2[] _constellationPositions;
-
-	[Export]
 	private AudioStreamPlayer _sfxPlayer;
 
 	[Export]
@@ -20,8 +14,15 @@ public partial class TelescopeView : Node2D {
 	[Export]
 	private AudioStream _constellationFound2;
 
-	private RandomNumberGenerator _rng = new();
+	[Export]
+	private Node2D _world;
 
+	[Export]
+	private Texture2D[] _starTextures;
+
+
+	private RandomNumberGenerator _rng = new();
+	private Vector2[] _constellationPositions;
 	private bool[] _constellationFound;
 
 	private float _starsMaxScale = 1.5f;
@@ -36,8 +37,14 @@ public partial class TelescopeView : Node2D {
 	private double _scanCooldown = 3;
 	private double _scanCooldownLeft = 0;
 
+	private bool[,] _hasStar;
+	private Vector2 _gridTileSize = new(32, 32);
+	private int _gridSize = 500;
+	private Vector2I[] _constellationStarPositions; // TODO: Init
+
 	public override void _Ready() {
-		_InitConstellations();
+		_camera.Position = _gridSize / 2f * _gridTileSize;
+		_InitWorld();
 	}
 
 	public override void _Process(double delta) {
@@ -48,8 +55,56 @@ public partial class TelescopeView : Node2D {
 		_ScanConstellation();
 	}
 
+	private void _InitWorld() {
+		_InitGrid();
+		_InitConstellations();
+		_InitRandomStars();
+	}
+
+	private void _InitGrid() {
+		_hasStar = new bool[_gridSize, _gridSize];
+	}
+
 	private void _InitConstellations() {
+		_constellationStarPositions = [
+			new Vector2I(0, 0), // 0
+			new Vector2I(5, 0),
+			new Vector2I(4, 2),
+			new Vector2I(1, 7),
+		]; // TODO: Init
+		_constellationPositions = [
+			new Vector2I(0, 0), // 0
+		]; // TODO: Init
 		_constellationFound = new bool[_constellationPositions.Length];
+		foreach (Vector2I position in _constellationStarPositions) {
+			_hasStar[position.X, position.Y] = true;
+			Sprite2D sprite = _CreateStarSprite(0); // Constellation stars are white
+			sprite.Position = position * _gridTileSize;
+		}
+	}
+
+	private void _InitRandomStars() {
+		for (int c = 0; c < _gridSize; c++) {
+			for (int r = 0; r < _gridSize; r++) {
+				if (_hasStar[c, r]) {
+					continue;
+				}
+
+				if (_rng.RandiRange(0, 100) < 98) {
+					continue;
+				}
+
+				Sprite2D sprite = _CreateStarSprite(_rng.RandiRange(1, 5)); // 5 non-white color options
+				sprite.Position = new Vector2I(c, r) * _gridTileSize;
+			}
+		}
+	}
+
+	private Sprite2D _CreateStarSprite(int textureId) {
+		Sprite2D sprite = new();
+		_world.AddChild(sprite);
+		sprite.Texture = _starTextures[textureId];
+		return sprite;
 	}
 
 	private void _MoveCamera(double delta) {
@@ -65,9 +120,7 @@ public partial class TelescopeView : Node2D {
 		_currentStarsScale += _starsScaleSpeed * zoomInput * (float)delta;
 		_currentStarsScale = Math.Clamp(_currentStarsScale, _starsMinScale, _starsMaxScale);
 		Vector2 scale = new(_currentStarsScale, _currentStarsScale);
-		foreach (Sprite2D star in _stars) {
-			star.Scale = scale;
-		}
+		_world.Scale = scale;
 	}
 
 	private void _ScanConstellation() {

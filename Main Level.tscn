@@ -5,16 +5,21 @@
 [ext_resource type="AudioStream" uid="uid://fpkcmm3rfvre" path="res://Assets/SFX/sfx_collect_star_sheen_01.mp3" id="2_uxobj"]
 [ext_resource type="AudioStream" uid="uid://dv1e174b7ckae" path="res://Assets/SFX/sfx_collect_star_sheen_02.mp3" id="3_bs0lh"]
 [ext_resource type="Texture2D" uid="uid://by3v1md6fdiii" path="res://Assets/Sprites/Space Background.png" id="3_ceigu"]
+[ext_resource type="Texture2D" uid="uid://c5olnuqcboapf" path="res://Assets/Sprites/Blue Star.png" id="5_bvbs8"]
 [ext_resource type="Texture2D" uid="uid://vlrowdpifp4j" path="res://Assets/Sprites/Star.png" id="6_bs0lh"]
+[ext_resource type="Texture2D" uid="uid://dqd8s1ahkach8" path="res://Assets/Sprites/Orange Star.png" id="6_oj6q3"]
+[ext_resource type="Texture2D" uid="uid://cfolpvmvh7miu" path="res://Assets/Sprites/Pink Star.png" id="7_b5ol6"]
+[ext_resource type="Texture2D" uid="uid://cmnd2kbckjwfs" path="res://Assets/Sprites/Red Star.png" id="8_k0axv"]
+[ext_resource type="Texture2D" uid="uid://dckh1nw6u5wpq" path="res://Assets/Sprites/Yellow Star.png" id="9_e4acw"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_stars", "_sfxPlayer")]
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
-_stars = [NodePath("Icon"), NodePath("Icon2"), NodePath("Icon3"), NodePath("Icon4")]
-_constellationPositions = PackedVector2Array(0, 0)
 _sfxPlayer = NodePath("AudioStreamPlayer")
 _constellationFound1 = ExtResource("2_uxobj")
 _constellationFound2 = ExtResource("3_bs0lh")
+_world = NodePath("World")
+_starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8"), ExtResource("6_oj6q3"), ExtResource("7_b5ol6"), ExtResource("8_k0axv"), ExtResource("9_e4acw")])
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
@@ -30,18 +35,24 @@ texture = ExtResource("1_75vo1")
 z_index = -10
 texture = ExtResource("3_ceigu")
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=1734834214]
+[node name="World" type="Node2D" parent="." unique_id=784492798]
+
+[node name="Icon" type="Sprite2D" parent="World" unique_id=1734834214]
+visible = false
 position = Vector2(53, -105)
 texture = ExtResource("6_bs0lh")
 
-[node name="Icon2" type="Sprite2D" parent="." unique_id=1182873925]
+[node name="Icon2" type="Sprite2D" parent="World" unique_id=1182873925]
+visible = false
 position = Vector2(209, 519)
 texture = ExtResource("6_bs0lh")
 
-[node name="Icon3" type="Sprite2D" parent="." unique_id=1699930040]
+[node name="Icon3" type="Sprite2D" parent="World" unique_id=1699930040]
+visible = false
 position = Vector2(1122, 199)
 texture = ExtResource("6_bs0lh")
 
-[node name="Icon4" type="Sprite2D" parent="." unique_id=57680345]
+[node name="Icon4" type="Sprite2D" parent="World" unique_id=57680345]
+visible = false
 position = Vector2(1175, 606)
 texture = ExtResource("6_bs0lh")
