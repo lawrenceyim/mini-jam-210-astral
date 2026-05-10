@@ -1,3 +1,7 @@
+# Force LF (Unix-style) line ending to avoid issues with Git committing changes of line ending when auto-formatting
+[*]
+end_of_line = lf
+
 # Using Java-style braces in 
 [*.cs]
 csharp_new_line_before_open_brace = none
