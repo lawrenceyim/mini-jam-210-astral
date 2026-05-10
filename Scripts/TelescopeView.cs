@@ -26,7 +26,10 @@ public partial class TelescopeView : Node2D {
 	[Export]
 	private Label _zoomLabel;
 
-	private static readonly Vector2 _gridTileSize = new(32, 32);
+	[Export]
+	private PackedScene[] _starScenes;
+
+	private static readonly Vector2 _gridTileSize = new(64, 64);
 
 	// divide ui scale by zoom
 	private float _maxCameraZoom = 2.5f;
@@ -40,13 +43,15 @@ public partial class TelescopeView : Node2D {
 	private Vector2 _cameraSpeed = _gridTileSize * 15;
 
 	private bool _scanKeyPressed = false;
-	private float _scanTolerance = 10; // in tiles which is 32 by 32
+	private float _scanTolerance = 10; // in tiles
 	private double _scanCooldown = 3;
 	private double _scanCooldownLeft = 0;
 
 	private bool[,] _hasStar;
 	private int _gridSize = 500;
 	private Vector2I[] _constellationStarPositions; // TODO: Init
+
+	private int _numberOfStarTypes = 5;
 
 	public override void _Ready() {
 		_camera.Position = _gridSize / 2f * _gridTileSize;
@@ -84,7 +89,8 @@ public partial class TelescopeView : Node2D {
 		_constellationFound = new bool[_constellationPositionTile.Length];
 		foreach (Vector2I position in _constellationStarPositions) {
 			_hasStar[position.X, position.Y] = true;
-			Sprite2D sprite = _CreateStarSprite(0); // Constellation stars are white
+			// Sprite2D sprite = _CreateStarSprite(0); // Constellation stars are white
+			AnimatedSprite2D sprite = _CreateAnimatedStarSprite(0);
 			sprite.Position = position * _gridTileSize;
 		}
 	}
@@ -100,10 +106,17 @@ public partial class TelescopeView : Node2D {
 					continue;
 				}
 
-				Sprite2D sprite = _CreateStarSprite(_rng.RandiRange(1, 5)); // 5 non-white color options
+				// Sprite2D sprite = _CreateStarSprite(_rng.RandiRange(1, _numberOfStarTypes));
+				AnimatedSprite2D sprite = _CreateAnimatedStarSprite(_rng.RandiRange(1, _numberOfStarTypes - 1));
 				sprite.Position = new Vector2I(c, r) * _gridTileSize;
 			}
 		}
+	}
+
+	private AnimatedSprite2D _CreateAnimatedStarSprite(int textureId) {
+		AnimatedSprite2D sprite = _starScenes[textureId].Instantiate<AnimatedSprite2D>();
+		_world.AddChild(sprite);
+		return sprite;
 	}
 
 	private Sprite2D _CreateStarSprite(int textureId) {

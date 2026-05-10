@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://4igski0ns4r3"]
+
+[ext_resource type="Texture2D" uid="uid://c2p7rc78wx2l5" path="res://Assets/Sprites/stars.webp" id="1_0a86d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yk287"]
+atlas = ExtResource("1_0a86d")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4tah0"]
+atlas = ExtResource("1_0a86d")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_huhhs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yk287")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4tah0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" unique_id=531596437]
+sprite_frames = SubResource("SpriteFrames_huhhs")
+autoplay = "default"
+frame = 1
+frame_progress = 0.73218644
