@@ -17,6 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://b34o7dskyp13n" path="res://Game Objects/Purple Star Long 1.tscn" id="13_fvuu1"]
 [ext_resource type="PackedScene" uid="uid://d0redw7h8xunn" path="res://Game Objects/Yellow Star Short 1.tscn" id="14_bx0s5"]
 [ext_resource type="AudioStream" uid="uid://bl6sesjk7ryk0" path="res://Assets/SFX/Orbital Bounce [TA_v01_2026-05-08].mp3" id="15_3gokw"]
+[ext_resource type="PackedScene" uid="uid://dkdr4h2vs668a" path="res://Game Objects/Galaxy 1.tscn" id="15_auyxm"]
+[ext_resource type="PackedScene" uid="uid://diyuevllkvwcs" path="res://Game Objects/Galaxy 2.tscn" id="16_bnpta"]
+[ext_resource type="PackedScene" uid="uid://dwri5w17hrybw" path="res://Game Objects/Galaxy 3.tscn" id="17_mup3o"]
+[ext_resource type="PackedScene" uid="uid://bukkgndg5u756" path="res://Game Objects/Galaxy 4.tscn" id="18_6jqta"]
+[ext_resource type="Texture2D" uid="uid://cooja1korogts" path="res://Assets/Sprites/Galaxy Background.webp" id="18_668ep"]
+[ext_resource type="PackedScene" uid="uid://biuhnqa03ldsk" path="res://Game Objects/Galaxy 5.tscn" id="19_sg73b"]
+[ext_resource type="PackedScene" uid="uid://dglspwxuolprq" path="res://Game Objects/Galaxy 6.tscn" id="20_4lex8"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bvbs8"]
 font_size = 32
@@ -32,6 +39,7 @@ _starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8")
 _cameraUi = NodePath("CanvasLayer/TelescopeView1280720")
 _zoomLabel = NodePath("CanvasLayer/Label")
 _starScenes = Array[PackedScene]([ExtResource("10_uqgby"), ExtResource("11_3gokw"), ExtResource("12_668ep"), ExtResource("13_fvuu1"), ExtResource("14_bx0s5")])
+_galaxyScenes = Array[PackedScene]([ExtResource("15_auyxm"), ExtResource("16_bnpta"), ExtResource("17_mup3o"), ExtResource("18_6jqta"), ExtResource("19_sg73b"), ExtResource("20_4lex8")])
 
 [node name="SFX AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
@@ -47,6 +55,7 @@ parameters/looping = true
 zoom = Vector2(0.25, 0.25)
 
 [node name="SpaceBackground" type="Sprite2D" parent="Camera2D" unique_id=2131916985]
+visible = false
 z_index = -10
 scale = Vector2(3, 3)
 texture = ExtResource("3_ceigu")
@@ -93,3 +102,11 @@ text = "Zoom: 1.00×"
 label_settings = SubResource("LabelSettings_bvbs8")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=46074533]
+z_index = -10
+repeat_size = Vector2(1154, 373)
+repeat_times = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=317948283]
+texture = ExtResource("18_668ep")

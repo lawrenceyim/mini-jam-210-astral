@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bukkgndg5u756"]
+
+[ext_resource type="Texture2D" uid="uid://n4g6kgl32yuy" path="res://Assets/Sprites/galaxies.webp" id="1_rel8d"]
+
+[node name="Sprite2D" type="Sprite2D" unique_id=111074003]
+texture = ExtResource("1_rel8d")
+region_enabled = true
+region_rect = Rect2(192, 0, 64, 64)

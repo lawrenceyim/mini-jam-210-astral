@@ -29,6 +29,9 @@ public partial class TelescopeView : Node2D {
     [Export]
     private PackedScene[] _starScenes;
 
+    [Export]
+    private PackedScene[] _galaxyScenes;
+
     private static readonly Vector2 _gridTileSize = new(64, 64);
     private static readonly int _gridSize = 500;
 
@@ -52,6 +55,7 @@ public partial class TelescopeView : Node2D {
     private List<Vector2I> _constellationStarPositions; // TODO: Init
 
     private int _numberOfStarTypes = 5;
+    private int _numberOfGalaxyTypes = 6;
 
     private Vector2I _outOfBoundsBottomRightCorner = (Vector2I)(_gridTileSize * _gridSize);
 
@@ -72,6 +76,7 @@ public partial class TelescopeView : Node2D {
         _InitGrid();
         _InitConstellations();
         _InitRandomStars();
+        _InitRandomGalaxies();
     }
 
     private void _InitGrid() {
@@ -95,18 +100,20 @@ public partial class TelescopeView : Node2D {
         ];
 
         List<Vector2I> constellationOffset = [
-            new(-40, 40),
-            new(-20, 40),
-            new(0, 40),
-            new(20, 40),
-            new(-40, 20),
-            new(-20, 20),
-            new(0, 20),
-            new(20, 20),
-            new(-40, 0),
-            new(-20, 0),
+            new(-220, 220),
+            new(-110, 220),
+            new(0, 220),
+            new(110, 220),
+
+            new(-220, 110),
+            new(-110, 110),
+            new(0, 110),
+            new(110, 110),
+
+            new(-220, 0),
+            new(-110, 0),
             new(0, 0),
-            new(20, 0)
+            new(110, 0)
         ];
 
         Vector2I originTile = new(_gridSize / 2, _gridSize / 2);
@@ -136,15 +143,40 @@ public partial class TelescopeView : Node2D {
                     continue;
                 }
 
-                if (_rng.RandiRange(0, 100) < 98) {
+                if (_rng.RandiRange(0, 100) < 99) {
                     continue;
                 }
 
+                _hasStar[c, r] = true;
                 // Sprite2D sprite = _CreateStarSprite(_rng.RandiRange(1, _numberOfStarTypes));
                 AnimatedSprite2D sprite = _CreateAnimatedStarSprite(_rng.RandiRange(1, _numberOfStarTypes - 1));
                 sprite.Position = new Vector2I(c, r) * _gridTileSize;
             }
         }
+    }
+
+    private void _InitRandomGalaxies() {
+        for (int c = 0; c < _gridSize; c++) {
+            for (int r = 0; r < _gridSize; r++) {
+                if (_hasStar[c, r]) {
+                    continue;
+                }
+
+                if (_rng.RandiRange(0, 1000) < 990) {
+                    continue;
+                }
+
+                _hasStar[c, r] = true;
+                Sprite2D sprite = _CreateGalaxySprite(_rng.RandiRange(1, _numberOfGalaxyTypes - 1));
+                sprite.Position = new Vector2I(c, r) * _gridTileSize;
+            }
+        }
+    }
+
+    private Sprite2D _CreateGalaxySprite(int textureId) {
+        Sprite2D sprite = _galaxyScenes[textureId].Instantiate<Sprite2D>();
+        _world.AddChild(sprite);
+        return sprite;
     }
 
     private AnimatedSprite2D _CreateAnimatedStarSprite(int textureId) {
