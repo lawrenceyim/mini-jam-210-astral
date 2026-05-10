@@ -24,9 +24,12 @@
 [ext_resource type="Texture2D" uid="uid://cooja1korogts" path="res://Assets/Sprites/Galaxy Background.webp" id="18_668ep"]
 [ext_resource type="PackedScene" uid="uid://biuhnqa03ldsk" path="res://Game Objects/Galaxy 5.tscn" id="19_sg73b"]
 [ext_resource type="PackedScene" uid="uid://dglspwxuolprq" path="res://Game Objects/Galaxy 6.tscn" id="20_4lex8"]
+[ext_resource type="Texture2D" uid="uid://3tr62w4h5sp8" path="res://Assets/Sprites/Key Not Pressed Sprite.png" id="24_bnpta"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bvbs8"]
 font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_bnpta"]
 
 [node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi", "_zoomLabel")]
 script = ExtResource("1_n8yra")
@@ -37,7 +40,7 @@ _constellationFound2 = ExtResource("3_bs0lh")
 _world = NodePath("World")
 _starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8"), ExtResource("6_oj6q3"), ExtResource("7_b5ol6"), ExtResource("8_k0axv"), ExtResource("9_e4acw")])
 _cameraUi = NodePath("CanvasLayer/TelescopeView1280720")
-_zoomLabel = NodePath("CanvasLayer/Label")
+_zoomLabel = NodePath("CanvasLayer/Zoom Label")
 _starScenes = Array[PackedScene]([ExtResource("10_uqgby"), ExtResource("11_3gokw"), ExtResource("12_668ep"), ExtResource("13_fvuu1"), ExtResource("14_bx0s5")])
 _galaxyScenes = Array[PackedScene]([ExtResource("15_auyxm"), ExtResource("16_bnpta"), ExtResource("17_mup3o"), ExtResource("18_6jqta"), ExtResource("19_sg73b"), ExtResource("20_4lex8")])
 
@@ -89,7 +92,7 @@ z_index = 10
 texture = ExtResource("1_75vo1")
 centered = false
 
-[node name="Label" type="Label" parent="CanvasLayer" unique_id=892245686]
+[node name="Zoom Label" type="Label" parent="CanvasLayer" unique_id=892245686]
 z_index = 20
 anchors_preset = 12
 anchor_top = 1.0
@@ -100,6 +103,35 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Zoom: 1.00×"
 label_settings = SubResource("LabelSettings_bvbs8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tutorial Label" type="Label" parent="CanvasLayer" unique_id=800551989]
+z_index = 20
+offset_left = 16.0
+offset_top = 7.0
+offset_right = 309.0
+offset_bottom = 91.0
+text = "WASD to move camera
+Arrow keys to zoom in and out"
+label_settings = SubResource("LabelSettings_bnpta")
+
+[node name="Keys" type="Node2D" parent="CanvasLayer" unique_id=365108742]
+visible = false
+z_index = 20
+
+[node name="WASD" type="Node2D" parent="CanvasLayer/Keys" unique_id=1865619400]
+position = Vector2(195, 460)
+
+[node name="W" type="Sprite2D" parent="CanvasLayer/Keys/WASD" unique_id=557016420]
+texture = ExtResource("24_bnpta")
+
+[node name="Label" type="Label" parent="CanvasLayer/Keys/WASD/W" unique_id=1444028260]
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+text = "W"
 horizontal_alignment = 1
 vertical_alignment = 1
 
