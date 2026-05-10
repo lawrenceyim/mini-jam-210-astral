@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cmnd2kbckjwfs" path="res://Assets/Sprites/Red Star.png" id="8_k0axv"]
 [ext_resource type="Texture2D" uid="uid://dckh1nw6u5wpq" path="res://Assets/Sprites/Yellow Star.png" id="9_e4acw"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world")]
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
 _sfxPlayer = NodePath("AudioStreamPlayer")
@@ -20,6 +20,7 @@ _constellationFound1 = ExtResource("2_uxobj")
 _constellationFound2 = ExtResource("3_bs0lh")
 _world = NodePath("World")
 _starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8"), ExtResource("6_oj6q3"), ExtResource("7_b5ol6"), ExtResource("8_k0axv"), ExtResource("9_e4acw")])
+_cameraUi = NodePath("Camera2D/TelescopeView1280720")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
