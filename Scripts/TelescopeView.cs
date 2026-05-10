@@ -9,10 +9,10 @@ public partial class TelescopeView : Node2D {
     private AudioStreamPlayer _sfxPlayer;
 
     [Export]
-    private AudioStream _constellationFound1;
+    private AudioStream _successSfx;
 
     [Export]
-    private AudioStream _constellationFound2;
+    private AudioStream _failedSfx;
 
     [Export]
     private Node2D _world;
@@ -27,6 +27,9 @@ public partial class TelescopeView : Node2D {
     private Label _zoomLabel;
 
     [Export]
+    private Label _scanStatusLabel;
+
+    [Export]
     private PackedScene[] _starScenes;
 
     [Export]
@@ -34,6 +37,12 @@ public partial class TelescopeView : Node2D {
 
     [Export]
     private Texture2D _earthTexture;
+
+    [Export]
+    private Label _objectiveLabel;
+
+    [Export]
+    private Label _distanceLabel;
 
     private static readonly Vector2 _gridTileSize = new(64, 64);
     private static readonly int _gridSize = 500;
@@ -49,16 +58,20 @@ public partial class TelescopeView : Node2D {
 
     private bool _scanKeyPressed = false;
     private float _scanTolerance = 10; // in tiles
-    private double _scanCooldown = 3;
+    private double _scanCooldown = 1;
     private double _scanCooldownLeft = 0;
 
     private bool[,] _tileOccupied;
+    private Vector2I _earthLocation;
     private List<Vector2I> _constellationStarPositions; // TODO: Init
 
     private int _numberOfStarTypes = 5;
     private int _numberOfGalaxyTypes = 6;
 
     private Vector2I _outOfBoundsBottomRightCorner = (Vector2I)(_gridTileSize * _gridSize);
+
+    private Color _scannerReadyColor = new Color(0, 100, 0, 1);
+    private Color _scannerRechargingColor = new Color(100, 0, 0, 1);
 
     public override void _Ready() {
         _camera.Position = _gridSize / 2f * _gridTileSize;
@@ -86,16 +99,16 @@ public partial class TelescopeView : Node2D {
     }
 
     private void _InitEarth() {
-        int r = 250;
-        int c = 250;
-        // int r = _rng.RandiRange(0, _gridSize);
-        // int c = _rng.RandiRange(0, _gridSize);
+        int r = _rng.RandiRange(0, _gridSize);
+        int c = _rng.RandiRange(0, _gridSize);
         _tileOccupied[r, c] = true;
 
         Sprite2D sprite = new();
         _world.AddChild(sprite);
         sprite.Texture = _earthTexture;
         sprite.Position = new Vector2(r, c) * _gridTileSize;
+        _earthLocation = new Vector2I(r, c);
+        GD.Print($"Earth location: {_earthLocation}");
     }
 
     private void _InitConstellations() {
@@ -239,33 +252,33 @@ public partial class TelescopeView : Node2D {
             return;
         }
 
+        _SetScanStatusText(false);
         Vector2I scannedTile = (Vector2I)(_camera.Position / _gridTileSize);
         GD.Print($"Scanning for {scannedTile} at Position {_camera.Position}");
-
         _scanCooldownLeft = _scanCooldown;
-
         _scanKeyPressed = true;
+
         GD.Print($"Scanned at {_camera.Position}");
-        // for (int i = 0; i < _constellationPositionTile.Count; i++) {
-        //     if (_constellationFound[i]) {
-        //         continue;
-        //     }
-        //
-        //     if (!(scannedTile.DistanceTo(_constellationPositionTile[i]) <= _scanTolerance)) {
-        //         continue;
-        //     }
-        //
-        //     GD.Print($"Found constellation {i} at {_constellationPositionTile[i]}");
-        //     _constellationFound[i] = true;
-        //     _sfxPlayer.Stream = _rng.RandiRange(0, 1) == 0 ? _constellationFound1 : _constellationFound2;
-        //     _sfxPlayer.Play();
-        //     // Play VFX
-        //     break;
-        // }
+        float distance = scannedTile.DistanceTo(_earthLocation);
+
+        if (distance <= _scanTolerance) {
+            GD.Print("Found earth");
+            _sfxPlayer.Stream = _successSfx;
+            _sfxPlayer.Play();
+            _objectiveLabel.Text = "Earth found.";
+        } else {
+            _sfxPlayer.Stream = _failedSfx;
+            _sfxPlayer.Play();
+            _distanceLabel.Text = $"{(int)distance} Light Years";
+        }
     }
 
     private void _ReduceCooldown(double delta) {
         _scanCooldownLeft -= delta;
+
+        if (_scanCooldownLeft <= 0) {
+            _SetScanStatusText(true);
+        }
     }
 
     private Vector2 _GetMovementInput() {
@@ -314,5 +327,16 @@ public partial class TelescopeView : Node2D {
             zoomInput,
             rotationInput
         );
+    }
+
+    private void _SetScanStatusText(bool ready) {
+        if (ready) {
+            _scanStatusLabel.Text = "Ready";
+            _scanStatusLabel.LabelSettings.FontColor = _scannerReadyColor;
+            return;
+        }
+
+        _scanStatusLabel.Text = "Scanner Recharging";
+        _scanStatusLabel.LabelSettings.FontColor = _scannerRechargingColor;
     }
 }

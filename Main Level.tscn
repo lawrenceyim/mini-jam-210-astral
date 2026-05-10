@@ -26,26 +26,32 @@
 [ext_resource type="PackedScene" uid="uid://dglspwxuolprq" path="res://Game Objects/Galaxy 6.tscn" id="20_4lex8"]
 [ext_resource type="Texture2D" uid="uid://ckjqjx6xf7l55" path="res://Assets/Sprites/Earth.png" id="21_mup3o"]
 [ext_resource type="Texture2D" uid="uid://3tr62w4h5sp8" path="res://Assets/Sprites/Key Not Pressed Sprite.png" id="24_bnpta"]
-[ext_resource type="Texture2D" uid="uid://3c7spqvu61tv" path="res://Assets/Sprites/Future Space Screen.png" id="25_6jqta"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mup3o"]
+font_size = 32
 
 [sub_resource type="LabelSettings" id="LabelSettings_bvbs8"]
 font_size = 32
+font_color = Color(0, 0.39215687, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_bnpta"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi", "_zoomLabel")]
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi", "_zoomLabel", "_scanStatusLabel", "_objectiveLabel", "_distanceLabel")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
 _sfxPlayer = NodePath("SFX AudioStreamPlayer")
-_constellationFound1 = ExtResource("2_uxobj")
-_constellationFound2 = ExtResource("3_bs0lh")
+_successSfx = ExtResource("2_uxobj")
+_failedSfx = ExtResource("3_bs0lh")
 _world = NodePath("World")
 _starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8"), ExtResource("6_oj6q3"), ExtResource("7_b5ol6"), ExtResource("8_k0axv"), ExtResource("9_e4acw")])
 _cameraUi = NodePath("CanvasLayer/TelescopeView1280720")
 _zoomLabel = NodePath("CanvasLayer/Zoom Label")
+_scanStatusLabel = NodePath("CanvasLayer/Scan Status Label")
 _starScenes = Array[PackedScene]([ExtResource("10_uqgby"), ExtResource("11_3gokw"), ExtResource("12_668ep"), ExtResource("13_fvuu1"), ExtResource("14_bx0s5")])
 _galaxyScenes = Array[PackedScene]([ExtResource("15_auyxm"), ExtResource("16_bnpta"), ExtResource("17_mup3o"), ExtResource("18_6jqta"), ExtResource("19_sg73b"), ExtResource("20_4lex8")])
 _earthTexture = ExtResource("21_mup3o")
+_objectiveLabel = NodePath("CanvasLayer/Objective Label")
+_distanceLabel = NodePath("CanvasLayer/Distance Label")
 
 [node name="SFX AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
@@ -105,6 +111,21 @@ offset_top = -141.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Zoom: 1.00×"
+label_settings = SubResource("LabelSettings_mup3o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Scan Status Label" type="Label" parent="CanvasLayer" unique_id=504577657]
+z_index = 20
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -720.0
+offset_bottom = -579.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Scan Ready"
 label_settings = SubResource("LabelSettings_bvbs8")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -116,20 +137,27 @@ offset_top = 7.0
 offset_right = 309.0
 offset_bottom = 91.0
 text = "WASD to move camera
-Arrow keys to zoom in and out"
+Arrow keys to zoom in and out
+Space to scan"
 label_settings = SubResource("LabelSettings_bnpta")
 
-[node name="FutureSpaceScreen" type="Sprite2D" parent="CanvasLayer" unique_id=2133303660]
-z_index = 20
-position = Vector2(1093, 353)
-texture = ExtResource("25_6jqta")
-
-[node name="Label" type="Label" parent="CanvasLayer/FutureSpaceScreen" unique_id=656247922]
-offset_left = -159.0
-offset_top = -94.0
-offset_right = 159.0
-offset_bottom = -32.0
+[node name="Objective Label" type="Label" parent="CanvasLayer" unique_id=656247922]
+z_index = 25
+offset_left = 934.0
+offset_top = 259.0
+offset_right = 1252.0
+offset_bottom = 321.0
 text = "FIND EARTH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Distance Label" type="Label" parent="CanvasLayer" unique_id=1774104189]
+z_index = 25
+offset_left = 934.0
+offset_top = 389.335
+offset_right = 1252.0
+offset_bottom = 451.335
+text = "Scan to discover distance"
 horizontal_alignment = 1
 vertical_alignment = 1
 
