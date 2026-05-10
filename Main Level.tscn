@@ -12,7 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://cmnd2kbckjwfs" path="res://Assets/Sprites/Red Star.png" id="8_k0axv"]
 [ext_resource type="Texture2D" uid="uid://dckh1nw6u5wpq" path="res://Assets/Sprites/Yellow Star.png" id="9_e4acw"]
 
-[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi")]
+[sub_resource type="LabelSettings" id="LabelSettings_bvbs8"]
+font_size = 32
+
+[node name="Node2D" type="Node2D" unique_id=441983215 node_paths=PackedStringArray("_camera", "_sfxPlayer", "_world", "_cameraUi", "_zoomLabel")]
 script = ExtResource("1_n8yra")
 _camera = NodePath("Camera2D")
 _sfxPlayer = NodePath("AudioStreamPlayer")
@@ -20,17 +23,15 @@ _constellationFound1 = ExtResource("2_uxobj")
 _constellationFound2 = ExtResource("3_bs0lh")
 _world = NodePath("World")
 _starTextures = Array[Texture2D]([ExtResource("6_bs0lh"), ExtResource("5_bvbs8"), ExtResource("6_oj6q3"), ExtResource("7_b5ol6"), ExtResource("8_k0axv"), ExtResource("9_e4acw")])
-_cameraUi = NodePath("Camera2D/TelescopeView1280720")
+_cameraUi = NodePath("CanvasLayer/TelescopeView1280720")
+_zoomLabel = NodePath("CanvasLayer/Label")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
 volume_db = -20.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1970771489]
-
-[node name="TelescopeView1280720" type="Sprite2D" parent="Camera2D" unique_id=1124737430]
-z_index = 10
-texture = ExtResource("1_75vo1")
+zoom = Vector2(0.5, 0.5)
 
 [node name="SpaceBackground" type="Sprite2D" parent="Camera2D" unique_id=2131916985]
 z_index = -10
@@ -58,3 +59,24 @@ texture = ExtResource("6_bs0lh")
 visible = false
 position = Vector2(1175, 606)
 texture = ExtResource("6_bs0lh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=448744474]
+
+[node name="TelescopeView1280720" type="Sprite2D" parent="CanvasLayer" unique_id=1124737430]
+z_index = 10
+texture = ExtResource("1_75vo1")
+centered = false
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=892245686]
+z_index = 20
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -141.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Zoom: 1.00×"
+label_settings = SubResource("LabelSettings_bvbs8")
+horizontal_alignment = 1
+vertical_alignment = 1
