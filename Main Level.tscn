@@ -24,7 +24,9 @@
 [ext_resource type="Texture2D" uid="uid://cooja1korogts" path="res://Assets/Sprites/Galaxy Background.webp" id="18_668ep"]
 [ext_resource type="PackedScene" uid="uid://biuhnqa03ldsk" path="res://Game Objects/Galaxy 5.tscn" id="19_sg73b"]
 [ext_resource type="PackedScene" uid="uid://dglspwxuolprq" path="res://Game Objects/Galaxy 6.tscn" id="20_4lex8"]
+[ext_resource type="Texture2D" uid="uid://ckjqjx6xf7l55" path="res://Assets/Sprites/Earth.png" id="21_mup3o"]
 [ext_resource type="Texture2D" uid="uid://3tr62w4h5sp8" path="res://Assets/Sprites/Key Not Pressed Sprite.png" id="24_bnpta"]
+[ext_resource type="Texture2D" uid="uid://3c7spqvu61tv" path="res://Assets/Sprites/Future Space Screen.png" id="25_6jqta"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bvbs8"]
 font_size = 32
@@ -43,6 +45,7 @@ _cameraUi = NodePath("CanvasLayer/TelescopeView1280720")
 _zoomLabel = NodePath("CanvasLayer/Zoom Label")
 _starScenes = Array[PackedScene]([ExtResource("10_uqgby"), ExtResource("11_3gokw"), ExtResource("12_668ep"), ExtResource("13_fvuu1"), ExtResource("14_bx0s5")])
 _galaxyScenes = Array[PackedScene]([ExtResource("15_auyxm"), ExtResource("16_bnpta"), ExtResource("17_mup3o"), ExtResource("18_6jqta"), ExtResource("19_sg73b"), ExtResource("20_4lex8")])
+_earthTexture = ExtResource("21_mup3o")
 
 [node name="SFX AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
@@ -115,6 +118,25 @@ offset_bottom = 91.0
 text = "WASD to move camera
 Arrow keys to zoom in and out"
 label_settings = SubResource("LabelSettings_bnpta")
+
+[node name="FutureSpaceScreen" type="Sprite2D" parent="CanvasLayer" unique_id=2133303660]
+z_index = 20
+position = Vector2(1093, 353)
+texture = ExtResource("25_6jqta")
+
+[node name="Label" type="Label" parent="CanvasLayer/FutureSpaceScreen" unique_id=656247922]
+offset_left = -159.0
+offset_top = -94.0
+offset_right = 159.0
+offset_bottom = -32.0
+text = "FIND EARTH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Earth" type="Sprite2D" parent="CanvasLayer" unique_id=1670293030]
+z_index = 25
+position = Vector2(1093, 355)
+texture = ExtResource("21_mup3o")
 
 [node name="Keys" type="Node2D" parent="CanvasLayer" unique_id=365108742]
 visible = false

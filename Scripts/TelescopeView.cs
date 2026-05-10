@@ -32,6 +32,9 @@ public partial class TelescopeView : Node2D {
     [Export]
     private PackedScene[] _galaxyScenes;
 
+    [Export]
+    private Texture2D _earthTexture;
+
     private static readonly Vector2 _gridTileSize = new(64, 64);
     private static readonly int _gridSize = 500;
 
@@ -41,8 +44,6 @@ public partial class TelescopeView : Node2D {
     private float _cameraZoomSpeed = 2f;
 
     private RandomNumberGenerator _rng = new();
-    private List<Vector2I> _constellationPositionTile;
-    private bool[] _constellationFound;
 
     private Vector2 _cameraMoveSpeed = _gridTileSize * 15;
 
@@ -51,7 +52,7 @@ public partial class TelescopeView : Node2D {
     private double _scanCooldown = 3;
     private double _scanCooldownLeft = 0;
 
-    private bool[,] _hasStar;
+    private bool[,] _tileOccupied;
     private List<Vector2I> _constellationStarPositions; // TODO: Init
 
     private int _numberOfStarTypes = 5;
@@ -74,13 +75,27 @@ public partial class TelescopeView : Node2D {
 
     private void _InitWorld() {
         _InitGrid();
+        _InitEarth();
         _InitConstellations();
         _InitRandomStars();
         _InitRandomGalaxies();
     }
 
     private void _InitGrid() {
-        _hasStar = new bool[_gridSize, _gridSize];
+        _tileOccupied = new bool[_gridSize, _gridSize];
+    }
+
+    private void _InitEarth() {
+        int r = 250;
+        int c = 250;
+        // int r = _rng.RandiRange(0, _gridSize);
+        // int c = _rng.RandiRange(0, _gridSize);
+        _tileOccupied[r, c] = true;
+
+        Sprite2D sprite = new();
+        _world.AddChild(sprite);
+        sprite.Texture = _earthTexture;
+        sprite.Position = new Vector2(r, c) * _gridTileSize;
     }
 
     private void _InitConstellations() {
@@ -119,7 +134,7 @@ public partial class TelescopeView : Node2D {
         Vector2I originTile = new(_gridSize / 2, _gridSize / 2);
 
         _constellationStarPositions = [];
-        _constellationPositionTile = []; // TODO: Init
+
 
         for (int i = 0; i < constellations.Count; i++) {
             foreach (Vector2I position in constellations[i]) {
@@ -127,9 +142,8 @@ public partial class TelescopeView : Node2D {
             }
         }
 
-        _constellationFound = new bool[_constellationPositionTile.Count];
         foreach (Vector2I position in _constellationStarPositions) {
-            _hasStar[position.X, position.Y] = true;
+            _tileOccupied[position.X, position.Y] = true;
             // Sprite2D sprite = _CreateStarSprite(0); // Constellation stars are white
             AnimatedSprite2D sprite = _CreateAnimatedStarSprite(0);
             sprite.Position = position * _gridTileSize;
@@ -139,7 +153,7 @@ public partial class TelescopeView : Node2D {
     private void _InitRandomStars() {
         for (int c = 0; c < _gridSize; c++) {
             for (int r = 0; r < _gridSize; r++) {
-                if (_hasStar[c, r]) {
+                if (_tileOccupied[c, r]) {
                     continue;
                 }
 
@@ -147,7 +161,7 @@ public partial class TelescopeView : Node2D {
                     continue;
                 }
 
-                _hasStar[c, r] = true;
+                _tileOccupied[c, r] = true;
                 // Sprite2D sprite = _CreateStarSprite(_rng.RandiRange(1, _numberOfStarTypes));
                 AnimatedSprite2D sprite = _CreateAnimatedStarSprite(_rng.RandiRange(1, _numberOfStarTypes - 1));
                 sprite.Position = new Vector2I(c, r) * _gridTileSize;
@@ -158,7 +172,7 @@ public partial class TelescopeView : Node2D {
     private void _InitRandomGalaxies() {
         for (int c = 0; c < _gridSize; c++) {
             for (int r = 0; r < _gridSize; r++) {
-                if (_hasStar[c, r]) {
+                if (_tileOccupied[c, r]) {
                     continue;
                 }
 
@@ -166,7 +180,7 @@ public partial class TelescopeView : Node2D {
                     continue;
                 }
 
-                _hasStar[c, r] = true;
+                _tileOccupied[c, r] = true;
                 Sprite2D sprite = _CreateGalaxySprite(_rng.RandiRange(1, _numberOfGalaxyTypes - 1));
                 sprite.Position = new Vector2I(c, r) * _gridTileSize;
             }
@@ -232,22 +246,22 @@ public partial class TelescopeView : Node2D {
 
         _scanKeyPressed = true;
         GD.Print($"Scanned at {_camera.Position}");
-        for (int i = 0; i < _constellationPositionTile.Count; i++) {
-            if (_constellationFound[i]) {
-                continue;
-            }
-
-            if (!(scannedTile.DistanceTo(_constellationPositionTile[i]) <= _scanTolerance)) {
-                continue;
-            }
-
-            GD.Print($"Found constellation {i} at {_constellationPositionTile[i]}");
-            _constellationFound[i] = true;
-            _sfxPlayer.Stream = _rng.RandiRange(0, 1) == 0 ? _constellationFound1 : _constellationFound2;
-            _sfxPlayer.Play();
-            // Play VFX
-            break;
-        }
+        // for (int i = 0; i < _constellationPositionTile.Count; i++) {
+        //     if (_constellationFound[i]) {
+        //         continue;
+        //     }
+        //
+        //     if (!(scannedTile.DistanceTo(_constellationPositionTile[i]) <= _scanTolerance)) {
+        //         continue;
+        //     }
+        //
+        //     GD.Print($"Found constellation {i} at {_constellationPositionTile[i]}");
+        //     _constellationFound[i] = true;
+        //     _sfxPlayer.Stream = _rng.RandiRange(0, 1) == 0 ? _constellationFound1 : _constellationFound2;
+        //     _sfxPlayer.Play();
+        //     // Play VFX
+        //     break;
+        // }
     }
 
     private void _ReduceCooldown(double delta) {
