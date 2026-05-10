@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://c2c1kkergwuop" path="res://Game Objects/Orange Star Long 1.tscn" id="12_668ep"]
 [ext_resource type="PackedScene" uid="uid://b34o7dskyp13n" path="res://Game Objects/Purple Star Long 1.tscn" id="13_fvuu1"]
 [ext_resource type="PackedScene" uid="uid://d0redw7h8xunn" path="res://Game Objects/Yellow Star Short 1.tscn" id="14_bx0s5"]
-[ext_resource type="AudioStream" uid="uid://bl6sesjk7ryk0" path="res://Assets/SFX/Orbital Bounce [TA_v01_2026-05-08].mp3" id="15_3gokw"]
 [ext_resource type="PackedScene" uid="uid://dkdr4h2vs668a" path="res://Game Objects/Galaxy 1.tscn" id="15_auyxm"]
 [ext_resource type="PackedScene" uid="uid://diyuevllkvwcs" path="res://Game Objects/Galaxy 2.tscn" id="16_bnpta"]
 [ext_resource type="PackedScene" uid="uid://dwri5w17hrybw" path="res://Game Objects/Galaxy 3.tscn" id="17_mup3o"]
@@ -25,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://biuhnqa03ldsk" path="res://Game Objects/Galaxy 5.tscn" id="19_sg73b"]
 [ext_resource type="PackedScene" uid="uid://dglspwxuolprq" path="res://Game Objects/Galaxy 6.tscn" id="20_4lex8"]
 [ext_resource type="Texture2D" uid="uid://ckjqjx6xf7l55" path="res://Assets/Sprites/Earth.png" id="21_mup3o"]
+[ext_resource type="AudioStream" uid="uid://bmstjpq0oyxpw" path="res://Assets/SFX/music_orbital_bounce_toby_alexander_v03_2026-05-10.ogg" id="22_mup3o"]
 [ext_resource type="Texture2D" uid="uid://3tr62w4h5sp8" path="res://Assets/Sprites/Key Not Pressed Sprite.png" id="24_bnpta"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_mup3o"]
@@ -55,11 +55,11 @@ _distanceLabel = NodePath("CanvasLayer/Distance Label")
 
 [node name="SFX AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1277195912]
 stream = ExtResource("2_uxobj")
-volume_db = -20.0
+volume_db = -10.0
 
 [node name="Music AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1521557768]
-stream = ExtResource("15_3gokw")
-volume_db = -25.0
+stream = ExtResource("22_mup3o")
+volume_db = -10.0
 autoplay = true
 parameters/looping = true
 
@@ -147,7 +147,7 @@ offset_left = 934.0
 offset_top = 259.0
 offset_right = 1252.0
 offset_bottom = 321.0
-text = "FIND EARTH"
+text = "Find Zeus"
 horizontal_alignment = 1
 vertical_alignment = 1
 
