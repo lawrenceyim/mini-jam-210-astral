@@ -34,6 +34,7 @@ texture = ExtResource("1_75vo1")
 
 [node name="SpaceBackground" type="Sprite2D" parent="Camera2D" unique_id=2131916985]
 z_index = -10
+scale = Vector2(3, 3)
 texture = ExtResource("3_ceigu")
 
 [node name="World" type="Node2D" parent="." unique_id=784492798]

@@ -24,18 +24,18 @@ public partial class TelescopeView : Node2D {
     private Sprite2D _cameraUi;
 
     // divide ui scale by zoom
-    private int _maxCameraZoom = 5;
-    private int _minCameraZoom = 1;
-    private float _cameraZoomSpeed = 3f;
+    private int _maxCameraZoom = 3;
+    private float _minCameraZoom = .5f;
+    private float _cameraZoomSpeed = 2f;
 
     private RandomNumberGenerator _rng = new();
-    private Vector2[] _constellationPositions;
+    private Vector2I[] _constellationPositionTile;
     private bool[] _constellationFound;
 
     private Vector2 _cameraSpeed = new(200, 200);
 
     private bool _scanKeyPressed = false;
-    private float _scanTolerance = 100f;
+    private float _scanTolerance = 10; // in tiles which is 32 by 32
     private double _scanCooldown = 3;
     private double _scanCooldownLeft = 0;
 
@@ -74,10 +74,10 @@ public partial class TelescopeView : Node2D {
             new Vector2I(4, 2),
             new Vector2I(1, 7),
         ]; // TODO: Init
-        _constellationPositions = [
+        _constellationPositionTile = [
             new Vector2I(0, 0), // 0
         ]; // TODO: Init
-        _constellationFound = new bool[_constellationPositions.Length];
+        _constellationFound = new bool[_constellationPositionTile.Length];
         foreach (Vector2I position in _constellationStarPositions) {
             _hasStar[position.X, position.Y] = true;
             Sprite2D sprite = _CreateStarSprite(0); // Constellation stars are white
@@ -142,29 +142,27 @@ public partial class TelescopeView : Node2D {
             return;
         }
 
-        _scanCooldownLeft = _scanCooldown;
+        Vector2I scannedTile = (Vector2I)(_camera.Position / _gridTileSize);
+        GD.Print($"Scanning for {scannedTile} at Position {_camera.Position}");
 
-        // REMOVE TESETING CODE
-        _sfxPlayer.Stream = _rng.RandiRange(0, 1) == 0 ? _constellationFound1 : _constellationFound2;
-        _sfxPlayer.Play();
-        //
+        _scanCooldownLeft = _scanCooldown;
 
         _scanKeyPressed = true;
         GD.Print($"Scanned at {_camera.Position}");
-        for (int i = 0; i < _constellationPositions.Length; i++) {
+        for (int i = 0; i < _constellationPositionTile.Length; i++) {
             if (_constellationFound[i]) {
                 continue;
             }
 
-            if (!(_camera.Position.DistanceTo(_constellationPositions[i]) <= _scanTolerance)) {
+            if (!(scannedTile.DistanceTo(_constellationPositionTile[i]) <= _scanTolerance)) {
                 continue;
             }
 
-            GD.Print($"Found constellation {i} at {_constellationPositions[i]}");
+            GD.Print($"Found constellation {i} at {_constellationPositionTile[i]}");
             _constellationFound[i] = true;
             _sfxPlayer.Stream = _rng.RandiRange(0, 1) == 0 ? _constellationFound1 : _constellationFound2;
             _sfxPlayer.Play();
-            // Play SFX
+            // Play VFX
             break;
         }
     }
