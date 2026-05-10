@@ -30,6 +30,7 @@ public partial class TelescopeView : Node2D {
 	private PackedScene[] _starScenes;
 
 	private static readonly Vector2 _gridTileSize = new(64, 64);
+	private static readonly int _gridSize = 500;
 
 	// divide ui scale by zoom
 	private float _maxCameraZoom = 2.5f;
@@ -48,10 +49,11 @@ public partial class TelescopeView : Node2D {
 	private double _scanCooldownLeft = 0;
 
 	private bool[,] _hasStar;
-	private int _gridSize = 500;
 	private Vector2I[] _constellationStarPositions; // TODO: Init
 
 	private int _numberOfStarTypes = 5;
+
+	private Vector2I _outOfBoundsBottomRightCorner = (Vector2I)(_gridTileSize * _gridSize);
 
 	public override void _Ready() {
 		_camera.Position = _gridSize / 2f * _gridTileSize;
@@ -129,6 +131,7 @@ public partial class TelescopeView : Node2D {
 	private void _MoveCamera(double delta) {
 		// TODO: Add out of bounds for the camera
 		_camera.Position += _GetMovementInput() * _cameraSpeed * (float)delta;
+				
 	}
 
 	private void _Zoom(int zoomInput, double delta) {
